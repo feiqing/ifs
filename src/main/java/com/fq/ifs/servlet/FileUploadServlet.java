@@ -98,9 +98,15 @@ public class FileUploadServlet extends HttpServlet {
         File dir = new File(saveDir);
         if (!dir.exists()) {
             dir.mkdirs();
-            dir.setReadable(true, false);
-            dir.setExecutable(true, false);
-            dir.setWritable(true, false);
+
+            makeVisitable(dir);
+            makeVisitable(dir.getParentFile());
         }
+    }
+
+    private void makeVisitable(File dir) {
+        dir.setReadable(true, false);
+        dir.setExecutable(true, false);
+        dir.setWritable(true, false);
     }
 }
