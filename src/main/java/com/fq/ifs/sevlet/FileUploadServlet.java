@@ -81,8 +81,8 @@ public class FileUploadServlet extends HttpServlet {
         return true;
     }
 
-    private String toLevelDir(String destFileName) {
-        String hash = Integer.toHexString(destFileName.hashCode());
+    private String toLevelDir(String uniqueName) {
+        String hash = Integer.toHexString(uniqueName.hashCode());
         return String.format("%s/%s/", hash.charAt(0), hash.charAt(1));
     }
 
