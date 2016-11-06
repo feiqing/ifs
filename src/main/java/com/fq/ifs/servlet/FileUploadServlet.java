@@ -99,6 +99,7 @@ public class FileUploadServlet extends HttpServlet {
         if (!dir.exists()) {
             dir.mkdirs();
             dir.setReadable(true, false);
+            dir.setExecutable(true, false);
             dir.setWritable(true, false);
         }
     }
