@@ -43,7 +43,7 @@ public class FileUploadServlet extends HttpServlet {
             image.write(saveDir + destFileName);
 
             // 生成外链
-            String url = LINK_ROOT_DIR + twoLevelDir + destFileName;
+            String url = LINK_ROOT_DIR + twoLevelDir + "/" + destFileName;
             writer.print(toLinkUrl(url));
         } else {
             writer.print("Error : file error");
