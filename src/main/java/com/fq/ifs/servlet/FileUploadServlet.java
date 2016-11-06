@@ -43,20 +43,19 @@ public class FileUploadServlet extends HttpServlet {
             image.write(saveDir + destFileName);
 
             // 生成外链
-            String url = LINK_ROOT_DIR + destFileName;
-            writer.print(url);
+            String url = LINK_ROOT_DIR + twoLevelDir + destFileName;
+            writer.print(toLinkUrl(url));
         } else {
             writer.print("Error : file error");
         }
     }
 
-    /**
-     * 校验文件表单域有效
-     *
-     * @param file
-     * @param fileName
-     * @return
-     */
+
+    private String toLinkUrl(String url) {
+        String linkPattern = "<a href=\"%s/\">%s</a>";
+        return String.format(linkPattern, url, url);
+    }
+
     private boolean isFileValid(Part file, String fileName) {
         // 上传的并非文件
         if (file.getContentType() == null) {
