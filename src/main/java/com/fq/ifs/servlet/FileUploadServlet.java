@@ -52,7 +52,7 @@ public class FileUploadServlet extends HttpServlet {
 
 
     private String toLinkUrl(String url) {
-        String linkPattern = "<a href=\"%s/\">%s</a>";
+        String linkPattern = "<a href=\"%s\">%s</a>";
         return String.format(linkPattern, url, url);
     }
 
