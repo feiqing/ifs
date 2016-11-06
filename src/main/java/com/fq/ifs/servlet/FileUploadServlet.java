@@ -2,6 +2,7 @@ package com.fq.ifs.servlet;
 
 import com.fq.ifs.servlet.dao.FileDAO;
 import com.google.common.base.Strings;
+import com.google.common.io.ByteStreams;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -11,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 @MultipartConfig
@@ -36,7 +39,7 @@ public class FileUploadServlet extends HttpServlet {
             String levelDir = toLevelDir(uniqueFileName);
             String saveDir = ROOT_DIR + levelDir;
             makeDirs(saveDir);
-            image.write(saveDir + uniqueFileName);
+            saveFile(saveDir + uniqueFileName, image.getInputStream());
 
             // 生成外链
             String url = LINK_ROOT_DIR + levelDir + uniqueFileName;
@@ -46,6 +49,14 @@ public class FileUploadServlet extends HttpServlet {
         } else {
             response.getWriter().println("wrong file");
         }
+    }
+
+    private void saveFile(String filePath, InputStream is) throws IOException {
+        File file = new File(filePath);
+        file.createNewFile();
+        makeVisitable(file);
+        FileOutputStream fos = new FileOutputStream(file);
+        ByteStreams.copy(is, fos);
     }
 
     private String toLinkUrl(String url) {
