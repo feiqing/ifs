@@ -13,7 +13,7 @@ check_result() {
 }
 
 ## 拉取最新代码
-# git pull
+git pull
 
 check_result $?
 
