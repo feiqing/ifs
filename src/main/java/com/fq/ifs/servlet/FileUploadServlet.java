@@ -1,8 +1,7 @@
 package com.fq.ifs.servlet;
 
+import com.fq.ifs.servlet.dao.FileDAO;
 import com.google.common.base.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -13,43 +12,41 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.UUID;
 
 @MultipartConfig
 @WebServlet(name = "FileUploadServlet", urlPatterns = "/upload.action", asyncSupported = true)
 public class FileUploadServlet extends HttpServlet {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadServlet.class);
+    private FileDAO dao = new FileDAO();
 
-    private static final String ROOT_DIR = "/data/files";
+    private static final String ROOT_DIR = "/data/files/";
 
     private static final String LINK_ROOT_DIR = "http://139.129.9.166:8000/files/";
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter writer = response.getWriter();
         Part image = request.getPart("file");
         String fileName = getFileName(image);
         if (isFileValid(image, fileName)) {
-            String destFileName = generateDestFileName(fileName);
+            String uniqueFileName = toUniqueName(fileName);
 
             // 保存文件
-            String twoLevelDir = generateTwoLevelDir(destFileName);
-            String saveDir = String.format("%s/%s/", ROOT_DIR, twoLevelDir);
+            String levelDir = toLevelDir(uniqueFileName);
+            String saveDir = ROOT_DIR + levelDir;
             makeDirs(saveDir);
-            image.write(saveDir + destFileName);
+            image.write(saveDir + uniqueFileName);
 
             // 生成外链
-            String url = LINK_ROOT_DIR + twoLevelDir + "/" + destFileName;
-            writer.print(toLinkUrl(url));
+            String url = LINK_ROOT_DIR + levelDir + uniqueFileName;
+            dao.insertFile(fileName, url);
+
+            response.getWriter().println(toLinkUrl(url));
         } else {
-            writer.print("Error : file error");
+            response.getWriter().println("wrong file");
         }
     }
-
 
     private String toLinkUrl(String url) {
         String linkPattern = "<a href=\"%s\">%s</a>";
@@ -69,22 +66,22 @@ public class FileUploadServlet extends HttpServlet {
         return true;
     }
 
-    private String generateTwoLevelDir(String destFileName) {
+    private String toLevelDir(String destFileName) {
         String hash = Integer.toHexString(destFileName.hashCode());
-        return String.format("%s/%s", hash.charAt(0), hash.charAt(1));
+        return String.format("%s/%s/", hash.charAt(0), hash.charAt(1));
     }
 
     private String generateUUID() {
         return UUID.randomUUID().toString().replace("-", "_");
     }
 
-    private String generateDestFileName(String fileName) {
-        String destFileName = generateUUID();
+    private String toUniqueName(String fileName) {
+        String uniqueName = generateUUID();
         int index = fileName.lastIndexOf(".");
         if (index != -1) {
-            destFileName += fileName.substring(index);
+            uniqueName += fileName.substring(index);
         }
-        return destFileName;
+        return uniqueName;
     }
 
     private String getFileName(Part part) {

@@ -7,7 +7,7 @@
 <form action="upload.action" method="POST" enctype="multipart/form-data">
     <table align="center" border="1" width="50%">
         <tr>
-            <td>Select A Image to Upload:</td>
+            <td>Select a file to Upload:</td>
             <td><input type="file" name="file"></td>
         </tr>
         <tr>
