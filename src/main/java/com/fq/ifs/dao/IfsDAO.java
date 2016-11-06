@@ -1,4 +1,4 @@
-package com.fq.ifs.servlet.dao;
+package com.fq.ifs.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

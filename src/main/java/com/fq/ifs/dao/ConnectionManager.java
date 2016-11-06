@@ -1,4 +1,4 @@
-package com.fq.ifs.servlet.dao;
+package com.fq.ifs.dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

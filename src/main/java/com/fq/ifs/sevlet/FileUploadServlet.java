@@ -1,6 +1,6 @@
-package com.fq.ifs.servlet;
+package com.fq.ifs.sevlet;
 
-import com.fq.ifs.servlet.dao.IfsDAO;
+import com.fq.ifs.dao.IfsDAO;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
