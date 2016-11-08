@@ -1,9 +1,10 @@
 package com.fq.ifs.sevlet;
 
-import com.fq.ifs.dao.IfsDAO;
+import com.fq.ifs.mq.IfsMQProducer;
 import com.google.common.base.Strings;
 import com.google.common.io.ByteStreams;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -21,11 +22,17 @@ import java.util.UUID;
 @WebServlet(name = "FileUploadServlet", urlPatterns = "/upload.action", asyncSupported = true)
 public class FileUploadServlet extends HttpServlet {
 
-    private IfsDAO dao = new IfsDAO();
+    private IfsMQProducer producer;
 
     private static final String FILE_ROOT_DIR = "/files/";
 
     private static final String LINK_ROOT_DIR = "http://139.129.9.166:5525/files/";
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        producer = (IfsMQProducer) getServletContext().getAttribute("mq_producer");
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,7 +50,7 @@ public class FileUploadServlet extends HttpServlet {
             if (saveFile(saveDir + uniqueName, file.getInputStream())) {
                 // 生成外链
                 String url = LINK_ROOT_DIR + levelDir + uniqueName;
-                dao.insertFile(fileName, url, file.getSize());
+                producer.publish(fileName, url, file.getSize());
 
                 response.getWriter().println(toLinkUrl(url));
                 return;

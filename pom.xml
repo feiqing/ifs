@@ -6,7 +6,7 @@
     <groupId>com.fq.ifs</groupId>
     <artifactId>ifs</artifactId>
     <packaging>war</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <properties>
         <!-- version -->
@@ -32,6 +32,13 @@
     </properties>
 
     <dependencies>
+
+        <!-- MQ -->
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>3.6.5</version>
+        </dependency>
         <!-- WEB -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -51,6 +58,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
 
         <!-- Test -->
