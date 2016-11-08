@@ -7,7 +7,7 @@ import com.fq.ifs.dao.IfsDAO;
  * @author jifang
  * @since 2016/11/8 下午3:24.
  */
-public class IfsMQConsumer extends AbsMQConsumer {
+public class IfsMQConsumer2 extends AbsMQConsumer {
 
     private IfsDAO dao = new IfsDAO();
 
@@ -18,5 +18,8 @@ public class IfsMQConsumer extends AbsMQConsumer {
         String fileLocation = json.getString("location");
         long size = json.getLongValue("size");
         dao.insertFile(fileName, fileLocation, size);
+
+
+        // woc
     }
 }

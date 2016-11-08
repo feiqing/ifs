@@ -1,6 +1,6 @@
 package com.fq.ifs.sevlet;
 
-import com.fq.ifs.mq.IfsMQConsumer;
+import com.fq.ifs.mq.IfsMQConsumer2;
 import com.fq.ifs.mq.IfsMQProducer;
 
 import javax.servlet.ServletContext;
@@ -15,13 +15,13 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class LoadOnStartListener implements ServletContextListener {
 
-    private IfsMQConsumer consumer;
+    private IfsMQConsumer2 consumer;
 
     private IfsMQProducer producer;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        consumer = new IfsMQConsumer();
+        consumer = new IfsMQConsumer2();
         producer = new IfsMQProducer();
 
         ServletContext context = sce.getServletContext();
